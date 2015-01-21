@@ -120,7 +120,7 @@ if(laravelInstalled()){
 
 if(isset($_POST['change_database'])) {
         $host = 'localhost';
-        $database = 'DOITcms';
+        $database = 'default_schema';
         $username = 'root';
         $password = '';
 

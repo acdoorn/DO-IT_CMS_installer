@@ -1,8 +1,14 @@
 <?
+
+$username = 'acdoorn';
+$password = 'acdoornpass';
+
+
 session_start();
 if(isset($_POST['changeprojectname'])) {
 	$_SESSION['projectname'] = $_POST['projectname'];
 }
+
 ini_set('max_execution_time', 3000);
 $packagecounter = 0;
 $totalpackages = 0;
@@ -235,7 +241,7 @@ if(isset($_POST['updatecomposer'])) {
 		changeDir();
 		removeBaseRoute();
 		$providers = array();
-		exec('composer config http-basic.github.com acdoorn Alex1994');
+		exec('composer config http-basic.github.com '.$username.' '.$password);
 		//exec('composer config github-oauth.github.com 7c41f0eddad28449d9f761c28f522dc218ea4fda');
 		foreach($modules as $module) {
 			foreach ($result as $row) {
@@ -247,6 +253,7 @@ if(isset($_POST['updatecomposer'])) {
 				}
 			}
 		}
+		exec('php artisan asset:publish');
 		addProviders('../'.$GLOBALS['projectname'].'/app/config/app.php', $providers);//routing has to be changed in Laravel 5.0
 	    echo('<div class="textdiv"><b><br/>The modules are being installed, this might take a couple of minutes</b></div>');
 	}
