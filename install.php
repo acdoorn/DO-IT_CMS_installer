@@ -72,16 +72,16 @@ function writeLog($logmessage) {
 }
 
 function changeDatabaseInfo($filename, $host, $database, $username, $password) {
-    if(!isset($host)) {
+    if(!isset($host) || $host == '') {
         $host = 'localhost';
     }
-    if(!isset($database)) {
-        $database = 'forge';
+    if(!isset($database) || $database == '') {
+        $database = 'default_schema';
     }
-    if(!isset($username)) {
+    if(!isset($username) || $username == '') {
         $username = 'root';
     }
-    if(!isset($password)) {
+    if(!isset($password) || $password == '') {
         $password = '';
     }
 
@@ -119,10 +119,10 @@ if(laravelInstalled()){
 }
 
 if(isset($_POST['change_database'])) {
-        $host = 'localhost';
-        $database = 'default_schema';
-        $username = 'root';
-        $password = '';
+        $host = $_POST['host'];
+        $database = $_POST['database'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
 
         changeDatabaseInfo('./'.$_SESSION['projectname2'].'/app/config/database.php', $host, $database, $username, $password);
         $htmlmessage = '<p><i class="icon-ok"></i> Composer is installed</p><br/>
@@ -135,20 +135,20 @@ if(isset($_POST['change_database'])) {
 
 //PHP POST-functions, version-checks & database loops together with HTML
 if(isset($_POST['composer'])) {
-	exec('composer about', $temp, $notinstalled);
+    exec('composer about', $temp, $notinstalled);
 
-	if(!$notinstalled) {
-		$htmlmessage = '<p><i class="icon-ok"></i> Composer is installed</p><br/>
-		<form method="post" action="install.php">
+    if(!$notinstalled) {
+        $htmlmessage = '<p><i class="icon-ok"></i> Composer is installed</p><br/>
+        <form method="post" action="install.php">
             <input name="projectname" id="projectname" type="text" placeholder="Projectname(standard '.$_SESSION['projectname'].')" /><br/><br/>
-			<input name="install_laravel" id="install_laravel" type="submit" value="Install Laravel project*"/><br/>
-			<small><label for="install_laravel">*This might take a couple minutes</label"></small>
-		</form>';
-	}
-	else {
-		$htmlmessage = '<p><i class="icon-remove"></i> Composer is not installed correctly</p>
-		<p>Try <a href="https://getcomposer.org/download">https://getcomposer.org/download</a><p>';
-	}
+            <input name="install_laravel" id="install_laravel" type="submit" value="Install Laravel project*"/><br/>
+            <small><label for="install_laravel">*This might take a couple minutes</label"></small>
+        </form>';
+    }
+    else {
+        $htmlmessage = '<p><i class="icon-remove"></i> Composer is not installed correctly</p>
+        <p>Try <a href="https://getcomposer.org/download">https://getcomposer.org/download</a><p>';
+    }
 }
 
 
@@ -193,8 +193,8 @@ if(isset($_POST['composer'])) {
 </head>
 <body>
     <div class="wrapper">
-    	<h1>DOIT&dash;Online CMS Server Requirements</h1>
-    	<p>
+        <h1>DOIT&dash;Online CMS Server Requirements</h1>
+        <p>
             <?php echo $requirements['php_version'] ? $strOk : $strFail; ?> PHP >= 5.3.7 
         </p>
         <p>
@@ -217,8 +217,8 @@ if(isset($_POST['composer'])) {
             <?php echo $strModRewriteEnabled; ?> mod_rewrite Module 
             <small>Required for Pretty URLs</small>
         </p>
-    	<?
-    	if($requirements['php_version'] && $requirements['mcrypt_enabled']) {
+        <?
+        if($requirements['php_version'] && $requirements['mcrypt_enabled']) {
                     if(laravelInstalled()) {
                         $htmlmessage = '<p><i class="icon-ok"></i> Composer is installed</p><br/>
                         <p><i class="icon-ok"></i>Laravel is installed successfully</p><br/>
@@ -269,7 +269,7 @@ if(isset($_POST['composer'])) {
                 echo '<h2 name="bottom">Installing the CMS.</h2>'.$htmlmessage;
                 echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
         }
-	    ?>
+        ?>
     </div>
 </body>
 
